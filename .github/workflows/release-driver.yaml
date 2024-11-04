@@ -13,7 +13,8 @@ jobs:
   csm-release:
     uses: dell/common-github-actions/.github/workflows/csm-release-driver-module.yaml@feature/driver-test
     name: Release CSM Drivers and Modules
-
+    with:
+      version: ${{ inputs.version }}
     secrets:
       QUAY_USERNAME: ${{ secrets.QUAY_USERNAME }}
       QUAY_PASSWORD: ${{ secrets.QUAY_PASSWORD }}
