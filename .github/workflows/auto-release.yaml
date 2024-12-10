@@ -8,6 +8,6 @@ on:
 
 jobs:
   csm-release:
-    uses: meggm/common-github-actions-test/.github/workflows/auto-csm-release-driver-module.yaml@main
-    name: Release CSM Drivers and Modules
+    uses: meggm/common-github-actions-test/.github/workflows/versioning.yaml@main
+    name: Versioning Workflow
     secrets: inherit
