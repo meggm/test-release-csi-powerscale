@@ -13,10 +13,5 @@ on:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Run a script
-        run: echo "This is a manual release workflow"
+    uses: meggm/common-github-actions-test/.github/workflows/versioning.yaml@main
+    name: Versioning Workflow
