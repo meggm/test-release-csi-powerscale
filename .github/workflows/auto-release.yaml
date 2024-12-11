@@ -1,32 +1,12 @@
-#name: Auto Release GoFSUtil
-#on:
-#  workflow_call:
-#  workflow_dispatch:
-#  repository_dispatch:
-#    types: [auto-driver-module-release-workflow]
-
-#jobs:
-#  csm-release:
-#    uses: meggm/common-github-actions-test/.github/workflows/versioning.yaml@main
-#    name: Versioning Workflow
-#    secrets: inherit
-
-name: Auto Release Workflow in Libs
-
+name: Auto Release GoFSUtil
 on:
+  workflow_call:
   workflow_dispatch:
   repository_dispatch:
     types: [auto-driver-module-release-workflow]
 
 jobs:
-  trigger-versioning:
-    name: Trigger Versioning Workflow in Common
-    runs-on: ubuntu-latest
-    steps:
-      - name: Dispatch Event to Common Repository's Versioning Workflow
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          repository: meggm/common-github-actions-test # Replace with the full name of the common repository
-          event-type: trigger-versioning
-          client-payload: '{"release_repo": "${{ github.repository }}"}'
+  csm-release:
+    uses: meggm/common-github-actions-test/.github/workflows/versioning.yaml@main
+    name: Versioning Workflow
+    secrets: inherit
