@@ -15,3 +15,6 @@ jobs:
   release:
     uses: meggm/common-github-actions-test/.github/workflows/versioning.yaml@main
     name: Versioning Workflow
+    with:
+      version: ${{ github.event.inputs.version }}
+      image: ${{ github.event.inputs.image }}
