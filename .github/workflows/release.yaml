@@ -14,7 +14,7 @@ on:
 jobs:
   release:
     uses: meggm/common-github-actions-test/.github/workflows/csm-release-driver-module.yaml@main
+    name: Release CSM Drivers and Modules
     with:
-      name: Release CSM Drivers and Modules
       version: ${{ github.event.inputs.version }}
       image: ${{ github.event.inputs.image }}
