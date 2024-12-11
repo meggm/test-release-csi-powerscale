@@ -21,22 +21,28 @@ jobs:
     outputs:
       new-version: ${{ steps.set-version.outputs.version }}
     steps:
-      # Step 1: Fetch the latest release version
+      # Step 1: Check out the repository with full history and tags
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch the full history including tags
+
+      # Step 2: Fetch the latest release version
       - name: Get latest release version
         id: get-latest-version
         run: |
           latest_version=$(git describe --tags $(git rev-list --tags --max-count=1))
           echo "latest_version=${latest_version}" >> $GITHUB_ENV
 
-      # Step 2: Increment minor version and remove 'v' prefix
+      # Step 3: Increment minor version and remove 'v' prefix
       - name: Increment minor version and remove 'v' prefix
         id: set-version
         run: |
-          # Remove 'v' prefix
+          # Use the fetched latest_version from environment
           version=${{ env.latest_version }}
           clean_version=${version#v} 
           
-          # Parse and increment minor version
+          # Parse version parts
           major=$(echo $clean_version | cut -d'.' -f1)
           minor=$(echo $clean_version | cut -d'.' -f2)
           patch=$(echo $clean_version | cut -d'.' -f3)
