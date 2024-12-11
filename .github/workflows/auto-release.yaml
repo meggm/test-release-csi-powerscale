@@ -1,12 +1,51 @@
-name: Auto Release GoFSUtil
+name: Auto Release CSM
 on:
   workflow_call:
+    inputs:
+      version:
+        required: false
+        type: string
+        description: "The version to be used. If not provided, it will be calculated."
+      image:
+        required: true
+        type: string
+        description: "The image to be used in the common workflow"
   workflow_dispatch:
   repository_dispatch:
     types: [auto-driver-module-release-workflow]
 
 jobs:
+  calculate-version:
+    if: ${{ inputs.version == null }}
+    runs-on: ubuntu-latest
+    outputs:
+      new-version: ${{ steps.set-version.outputs.version }}
+    steps:
+      # Step 1: Fetch the latest release version
+      - name: Get latest release version
+        id: get-latest-version
+        run: |
+          latest_version=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo "Latest version: $latest_version"
+          echo "latest_version=${latest_version}" >> $GITHUB_ENV
+
+      # Step 2: Increment minor version and remove 'v' prefix
+      - name: Increment minor version and remove 'v' prefix
+        id: set-version
+        run: |
+          version=${{ env.latest_version#v }}  # Remove 'v' prefix
+          major=$(echo $version | cut -d'.' -f1)
+          minor=$(echo $version | cut -d'.' -f2)
+          patch=$(echo $version | cut -d'.' -f3)
+          new_minor=$((minor + 1))             # Increment minor version
+          new_version="${major}.${new_minor}.0"
+          echo "New version: $new_version"
+          echo "::set-output name=version::$new_version"
+
   csm-release:
     uses: meggm/common-github-actions-test/.github/workflows/versioning.yaml@main
     name: Versioning Workflow
+    with:
+      version: ${{ inputs.version || needs.calculate-version.outputs.new-version }}
+      image: ${{ inputs.image }}
     secrets: inherit
