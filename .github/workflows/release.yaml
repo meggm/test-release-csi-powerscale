@@ -18,3 +18,4 @@ jobs:
     with:
       version: ${{ github.event.inputs.version }}
       image: ${{ github.event.inputs.image }}
+    secrets: inherit
