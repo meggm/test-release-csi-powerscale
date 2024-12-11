@@ -1,0 +1,17 @@
+name: Release GoFSUtil
+# Invocable as a reusable workflow
+# Can be manually triggered
+on:  # yamllint disable-line rule:truthy
+  workflow_call:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (major, minor, patch) Ex: 1.0.0'
+        required: true
+      image:
+        description: 'Image to use'
+        required: true
+jobs:
+  csm-release:
+    uses: meggm/common-github-actions-test/.github/workflows/versioning@main
+    name: Versioning Workflow
