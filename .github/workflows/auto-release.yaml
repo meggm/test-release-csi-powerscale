@@ -39,7 +39,7 @@ jobs:
 
   csm-release:
     needs: calculate-version
-    uses: meggm/common-github-actions-test/.github/workflows/versioning.yaml@main
+    uses: meggm/common-github-actions-test/.github/workflows/csm-release-driver-module.yaml@main
     with:
       version: ${{ inputs.version || needs.calculate-version.outputs.new-version }}
       image: "csi-isilon"
