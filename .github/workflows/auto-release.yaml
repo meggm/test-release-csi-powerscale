@@ -1,44 +1,39 @@
 name: Auto Release CSM
 on:
-  workflow_call:
   workflow_dispatch:
     inputs:
       version:
+        description: "The version to be used. If not provided, it will be calculated."
         required: false
         type: string
-        description: "The version to be used. If not provided, it will be calculated."
       image:
+        description: "The image to be used in the common workflow."
         required: true
         type: string
-        description: "The image to be used in the common workflow."
   repository_dispatch:
     types: [auto-driver-module-release-workflow]
 
 jobs:
   calculate-version:
-    if: ${{ inputs.version == null }}
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.version == null || github.event_name == 'repository_dispatch' }}
     runs-on: ubuntu-latest
     outputs:
       new-version: ${{ steps.set-version.outputs.version }}
     steps:
-      # Step 1: Check out the repository with full history and tags
       - name: Check out repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Fetch the full history including tags
 
-      # Step 2: Fetch the latest release version
       - name: Get latest release version
         id: get-latest-version
         run: |
           latest_version=$(git describe --tags $(git rev-list --tags --max-count=1))
           echo "latest_version=${latest_version}" >> $GITHUB_ENV
 
-      # Step 3: Increment minor version and remove 'v' prefix
       - name: Increment minor version and remove 'v' prefix
         id: set-version
         run: |
-          # Use the fetched latest_version from environment
           version=${{ env.latest_version }}
           clean_version=${version#v} 
           
