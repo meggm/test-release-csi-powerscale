@@ -6,7 +6,6 @@ on:
 
 jobs:
   calculate-version:
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.version == null || github.event_name == 'repository_dispatch' }}
     runs-on: ubuntu-latest
     outputs:
       new-version: ${{ steps.set-version.outputs.version }}
