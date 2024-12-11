@@ -1,15 +1,6 @@
 name: Auto Release CSM
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: "The version to be used. If not provided, it will be calculated."
-        required: false
-        type: string
-      image:
-        description: "The image to be used in the common workflow."
-        required: true
-        type: string
   repository_dispatch:
     types: [auto-driver-module-release-workflow]
 
@@ -52,5 +43,5 @@ jobs:
     uses: meggm/common-github-actions-test/.github/workflows/versioning.yaml@main
     with:
       version: ${{ inputs.version || needs.calculate-version.outputs.new-version }}
-      image: ${{ inputs.image }}
+      image: "csi-isilon"
     secrets: inherit
